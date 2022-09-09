@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_order_tree_tasks_status_inherit" model="ir.ui.view">
+            <field name="name">sale.order.tree.tasks.status</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="delivery_status" position="after">                    
+                    <field name="task_status" optional="show"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
