@@ -6,7 +6,7 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_tree"/>
             <field name="arch" type="xml">
-                <field name="delivery_status" position="after">                    
+                <field name="invoice_status" position="before">
                     <field name="task_status" optional="show"/>
                 </field>
             </field>
