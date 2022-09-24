@@ -2,7 +2,7 @@
 
 {
     'name': 'Tasks Stages and Status',
-    'version': '0.1',
+    'version': '0.2',
     'category': 'Hidden',
     'license': 'LGPL-3',
     'summary': 'Sales Orders',

@@ -12,8 +12,11 @@ class SaleOrder(models.Model):
         ('finished', 'Finished'),
     ], string='Task Status', compute='_compute_task_status', compute_sudo=False, store=True)
 
-    @api.depends('tasks_ids', 'tasks_ids.stage_id', 'tasks_ids.is_closed')
-    def _compute_task_status(self):
+    @api.depends('order_line.product_id.project_id')
+    def _compute_tasks_ids(self):
+        # We need to do this in an overide as it depends of task_ids which is
+        # itself a computed field -> It can't be added as @api.depends
+        super()._compute_tasks_ids()
         for order in self:
             if not order.tasks_ids:
                 order.task_status = False
