@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
         ('in progress', 'In Progress'),
         ('partially finished', 'Partially Finished'),
         ('finished', 'Finished'),
-    ], string='Task Status', compute='_compute_tasks_ids', store=True)
+    ], string='Task Status', compute='_compute_task_status', compute_sudo=False, store=True)
 
     @api.depends('order_line.product_id.project_id')
     def _compute_tasks_ids(self):
