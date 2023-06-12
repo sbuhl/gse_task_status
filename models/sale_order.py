@@ -11,17 +11,17 @@ class SaleOrder(models.Model):
         ('finished', 'Finished'),
     ], string='Task Status', compute='_compute_tasks_ids', compute_sudo=False, store=True)
 
-    order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True, auto_join=True)
+    order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
 
-    mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value', store=True)
-    mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician', store=True)
-    mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians', store=True)
+    mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
+    mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician')
+    mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
 
     @api.depends('tasks_ids.user_ids')
     def _compute_mo_technicians(self):
         for order in self:
             order.mo_technicians = order.tasks_ids.mapped('user_ids')
-
+    
     @api.depends('order_line.product_id.service_tracking')
     def _compute_mo_value(self):
         for order in self:
