@@ -15,7 +15,7 @@ class SaleOrder(models.Model):
 
     mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
     mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician')
-    mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians', store=True)
+    mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
 
     @api.depends('tasks_ids.user_ids')
     def _compute_mo_technicians(self):
