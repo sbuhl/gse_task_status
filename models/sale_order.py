@@ -17,11 +17,12 @@ class SaleOrder(models.Model):
     mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician')
     mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
 
-    @api.depends('tasks_ids.user_ids')
+    # @api.depends('tasks_ids.user_ids')
+    @api.depends('order_line.product_id.project_id')
     def _compute_mo_technicians(self):
         for order in self:
             order.mo_technicians = order.tasks_ids.mapped('user_ids')
-    
+
     @api.depends('order_line.product_id.service_tracking')
     def _compute_mo_value(self):
         for order in self:
@@ -31,7 +32,7 @@ class SaleOrder(models.Model):
     def _compute_mo_value_technician(self):
         for order in self:
             order.mo_value_technician = order.mo_value * 0.1
-    
+
     @api.depends('order_line.product_id.project_id')
     def _compute_tasks_ids(self):
         # We need to do this in an overide as it depends of task_ids which is
