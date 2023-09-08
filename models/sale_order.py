@@ -9,34 +9,37 @@ class SaleOrder(models.Model):
         ('in progress', 'In Progress'),
         ('partially finished', 'Partially Finished'),
         ('finished', 'Finished'),
-    ], string='Task Status', compute='_compute_tasks_ids', compute_sudo=False, store=True)
+    ], string='Task Status', compute='_compute_task_status', compute_sudo=False, store=True)
 
     order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
 
     mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
     mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician')
     mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
+    
+    tasks_ids = fields.Many2many('project.task', string='Tasks For Status', search='_search_tasks_ids')
 
-    @api.depends('tasks_ids.user_ids')
+    @api.depends('tasks_ids', 'tasks_ids.user_ids')
     def _compute_mo_technicians(self):
         for order in self:
             order.mo_technicians = order.tasks_ids.mapped('user_ids')
-    
-    @api.depends('order_line.product_id.service_tracking')
+
+    @api.depends('order_line.price_subtotal', 'order_line.product_id.service_tracking')
     def _compute_mo_value(self):
         for order in self:
-            order.mo_value = sum(order.order_line.filtered(lambda l: l.product_id.service_tracking == 'task_global_project').mapped('price_subtotal'))
+            order.mo_value = sum(
+                line.price_subtotal
+                for line in order.order_line
+                if line.product_id.service_tracking == 'task_global_project'
+            )
 
     @api.depends('mo_value')
     def _compute_mo_value_technician(self):
         for order in self:
-            order.mo_value_technician = order.mo_value * 0.1
+            order.mo_value_technician = order.mo_value * 0.1 if order.mo_value else 0.0
     
     @api.depends('order_line.product_id.project_id')
-    def _compute_tasks_ids(self):
-        # We need to do this in an overide as it depends of task_ids which is
-        # itself a computed field -> It can't be added as @api.depends
-        super()._compute_tasks_ids()
+    def _compute_task_status(self):
         for order in self:
             if not order.tasks_ids:
                 order.task_status = False
