@@ -14,7 +14,7 @@ class SaleOrder(models.Model):
     order_line = fields.One2many('sale.order.line', 'order_id', string='Order Lines', states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, copy=True)
 
     mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
-    mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician')
+    mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician',store=True)
     mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
     
     tasks_ids = fields.Many2many('project.task', string='Tasks For Status', search='_search_tasks_ids')
