@@ -10,9 +10,10 @@
         Display the status of a task. 
         Open | Closed
     """,
-    'depends': ['sale_project'],
+    'depends': ['base', 'sale_project', 'sale'],
     'data': [
         'views/gse_sale_order_view.xml',
+        'security/security.xml',
     ],
     'installable': True,
     
