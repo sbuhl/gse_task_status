@@ -12,8 +12,9 @@
     """,
     'depends': ['sale_project'],
     'data': [
+        'security/security.xml',
         'views/gse_sale_order_view.xml',
     ],
     'installable': True,
-    
+
 }
