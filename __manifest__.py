@@ -14,6 +14,7 @@
     'data': [
         'security/security.xml',
         'views/gse_sale_order_view.xml',
+        'views/project_report_fsm.xml'
     ],
     'installable': True,
 
