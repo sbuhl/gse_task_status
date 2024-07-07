@@ -16,7 +16,7 @@ class SaleOrder(models.Model):
     mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
     mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician',store=True)
     mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
-    
+
     tasks_ids = fields.Many2many('project.task', string='Tasks For Status', search='_search_tasks_ids')
 
     @api.depends('tasks_ids', 'tasks_ids.user_ids')
@@ -37,15 +37,16 @@ class SaleOrder(models.Model):
     def _compute_mo_value_technician(self):
         for order in self:
             order.mo_value_technician = order.mo_value * 0.1 if order.mo_value else 0.0
-    
+
     @api.depends('order_line.product_id.project_id')
     def _compute_task_status(self):
         for order in self:
+            is_closed = order.state in ["1_done", "1_canceled"]
             if not order.tasks_ids:
                 order.task_status = False
-            elif all(p.is_closed is True for p in order.tasks_ids):
+            elif all(is_closed is True for p in order.tasks_ids):
                 order.task_status = 'finished'
-            elif any(p.is_closed is True for p in order.tasks_ids):
+            elif any(is_closed is True for p in order.tasks_ids):
                 order.task_status = 'partially finished'
             else:
                 order.task_status = 'in progress'
