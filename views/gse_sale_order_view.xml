@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <field name="invoice_status" position="before">
                     <field name="task_status" optional="show"/>
-                    <field name="mo_value_technician" optional="show" groups="base.group_system" widget="monetary" sum="Total MO"/>
+                    <field name="mo_value_technician" optional="show" widget="monetary" sum="Total MO" groups="sales_team.group_sale_salesman"/>
                     <field name="mo_technicians" optional="show" widget="many2many_tags_avatar"/>
                 </field>
             </field>
