@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="project_task_user_view_pivot_inherit" model="ir.ui.view">
+        <field name="name">report.project.task.user.pivot</field>
+        <field name="model">report.project.task.user.fsm</field>
+        <field name="inherit_id" ref="industry_fsm.project_task_user_view_pivot"/>
+        <field name="arch" type="xml">
+            <xpath expr="//pivot" position="inside">
+                 <field name="mo_value_technician" type="measure" widget="monetary" sum="Total MO" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_task_user_view_graph_inherit" model="ir.ui.view">
+        <field name="name">report.project.task.user.graph</field>
+        <field name="model">report.project.task.user.fsm</field>
+        <field name="inherit_id" ref="industry_fsm.project_task_user_view_graph"/>
+        <field name="arch" type="xml">
+          <xpath expr="//graph" position="inside">
+                 <field name="mo_value_technician" type="measure" widget="monetary" sum="Total MO" />
+          </xpath>
+        </field>
+    </record>
+</odoo>

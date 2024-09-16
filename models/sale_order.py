@@ -16,8 +16,8 @@ class SaleOrder(models.Model):
     mo_value = fields.Monetary(compute='_compute_mo_value', string='MO Value')
     mo_value_technician = fields.Monetary(compute='_compute_mo_value_technician', string='MO Value Technician',store=True)
     mo_technicians = fields.Many2many('res.users', string='MO Technicians', compute='_compute_mo_technicians')
-    
     tasks_ids = fields.Many2many('project.task', string='Tasks For Status', search='_search_tasks_ids')
+   
 
     @api.depends('tasks_ids', 'tasks_ids.user_ids')
     def _compute_mo_technicians(self):
@@ -31,7 +31,7 @@ class SaleOrder(models.Model):
                 line.price_subtotal
                 for line in order.order_line
                 if line.product_id.service_tracking == 'task_global_project'
-            )
+            )  
 
     @api.depends('mo_value')
     def _compute_mo_value_technician(self):
@@ -49,3 +49,4 @@ class SaleOrder(models.Model):
                 order.task_status = 'partially finished'
             else:
                 order.task_status = 'in progress'
+
